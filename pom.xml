@@ -1,0 +1,263 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.leturu</groupId>
+	<artifactId>leturu_2020</artifactId>
+	<version>0.1</version>
+	<description>Example tests based on Maven+Selenium+Cucumber</description>
+
+	<scm>
+		<connection>scm:git:ssh://git@github.com:vastenly/leturu_2020.git</connection>
+		<developerConnection>scm:git:ssh://git@github.com:vastenly/leturu_2020.git</developerConnection>
+		<url>scm:git:ssh://git@github.com:vastenly/leturu_2020.git</url>
+		<tag>v0.1</tag>
+	</scm>
+
+	<properties>
+		<source.encoding>UTF-8</source.encoding>
+		<spring.version>4.0.5.RELEASE</spring.version>
+		
+		<selenium.api.version>2.53.1</selenium.api.version>
+		<!-- ChromeDriver_Mac64_2.36 -->
+		
+		<maven-compiler-plugin-version>2.3.2</maven-compiler-plugin-version>
+		<maven-release-plugin-version>2.5.1</maven-release-plugin-version>
+		<cucumber-jvm.version>1.1.8</cucumber-jvm.version>
+	</properties>
+
+	<profiles>
+
+		<!-- Profiles for single thread tests executing -->
+		<profile>
+			<id>wip</id>
+			<properties>
+				<junit.parallel>none</junit.parallel>
+				<test.forkCount>0</test.forkCount>
+				<test.filter>@wip</test.filter>
+				<cucumber-tag>wip</cucumber-tag>
+				<test.runner>**/*WipTests.class</test.runner>
+			</properties>
+		</profile>
+
+		<profile>
+			<id>test</id>
+			<properties>
+				<junit.parallel>none</junit.parallel>
+				<test.forkCount>0</test.forkCount>
+				<test.filter>@test</test.filter>
+				<cucumber-tag>test</cucumber-tag>
+				<test.runner>**/*ActiveTests.class</test.runner>
+			</properties>
+		</profile>
+
+	<!--Profiles for env type selection -->
+        <profile>
+            <id>auto</id>
+            <properties>
+                <junit.parallel>none</junit.parallel>
+                <test.forkCount>0</test.forkCount>
+                <environment>auto</environment>
+            </properties>
+        </profile>
+        <profile>
+            <id>qa</id>
+            <properties>
+                <junit.parallel>none</junit.parallel>
+                <test.forkCount>0</test.forkCount>
+                <environment>qa</environment>
+            </properties>
+        </profile>
+	</profiles>
+
+	<dependencies>
+
+		<!-- Log4j -->
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.17</version>
+		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit-dep</artifactId>
+			<version>4.11</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<!-- Spring -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		
+		<!-- Selenium -->
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-api</artifactId>
+			<version>${selenium.api.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>${selenium.api.version}</version>
+			<!-- Exclude xerces in selenium-java -->
+			<exclusions>
+				<exclusion>
+					<groupId>xerces</groupId>
+					<artifactId>xercesImpl</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<!-- core -->
+		<dependency> <groupId>taf</groupId> <artifactId>taf</artifactId > 
+			<version>0.1</version> <systemPath>${basedir}/taf.jar</systemPath> <scope>system</scope> 
+		</dependency>
+			
+		<dependency> <groupId>configbuilder</groupId> <artifactId>configbuilder</artifactId > 
+			<version>0.1</version> <systemPath>${basedir}/configbuilder.jar</systemPath> <scope>system</scope> 
+		</dependency>
+			
+
+		<!-- Cucumber JVM -->
+		<dependency>
+			<groupId>info.cukes</groupId>
+			<artifactId>cucumber-core</artifactId>
+			<version>${cucumber-jvm.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>info.cukes</groupId>
+			<artifactId>cucumber-java</artifactId>
+			<version>${cucumber-jvm.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>info.cukes</groupId>
+			<artifactId>cucumber-junit</artifactId>
+			<version>${cucumber-jvm.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>info.cukes</groupId>
+			<artifactId>cucumber-spring</artifactId>
+			<version>${cucumber-jvm.version}</version>
+		</dependency>
+
+		<!-- Gherkin JVM -->
+		<dependency>
+			<groupId>info.cukes</groupId>
+			<artifactId>gherkin-jvm-deps</artifactId>
+			<version>1.0.2</version>
+		</dependency>
+
+		<!-- Cucumber reporting -->
+		<dependency>
+			<groupId>net.masterthought</groupId>
+			<artifactId>cucumber-reporting</artifactId>
+			<version>0.0.21</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>geronimo-spec-javamail</artifactId>
+					<groupId>geronimo-spec</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>geronimo-spec-jms</artifactId>
+					<groupId>geronimo-spec</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>junit</artifactId>
+					<groupId>junit</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>net.masterthought</groupId>
+			<artifactId>maven-cucumber-reporting</artifactId>
+			<version>0.0.4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>19.0</version>
+			<scope>compile</scope>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<!-- Source directory configuration -->
+		<!-- <sourceDirectory>src</sourceDirectory> -->
+		<plugins>
+
+			<!-- Following plugin executes the testng tests -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven-compiler-plugin-version}</version>
+				<configuration>
+					<encoding>${source.encoding}</encoding>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.18.1</version>
+				<executions>
+					<execution>
+						<id>acceptance-test</id>
+						<goals>
+							<goal>test</goal>
+						</goals>
+
+						<configuration>
+							<useSystemClassLoader>true</useSystemClassLoader>
+							<useManifestOnlyJar>false</useManifestOnlyJar>
+							<forkCount>${test.forkCount}</forkCount>
+							<reuseForks>false</reuseForks>
+							<useFile>false</useFile>
+							<includes>
+								<include>${test.runner}</include>
+							</includes>
+							<testFailureIgnore>false</testFailureIgnore>
+							<!-- <additionalClasspathElements> <additionalClasspathElement>${basedir}/deployment/${environment}</additionalClasspathElement> 
+								</additionalClasspathElements> -->
+							
+							<!--<outputEncoding>UTF-8</outputEncoding>-->
+							<!-- <argLine>-Dfile.encoding=UTF-8</argLine> -->
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>${maven-release-plugin-version}</version>
+				<configuration>
+					<tagNameFormat>v@{project.version}</tagNameFormat>
+				</configuration>
+			</plugin>
+
+		</plugins>
+	</build>
+
+</project>

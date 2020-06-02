@@ -15,7 +15,7 @@
 
 	<properties>
 		<source.encoding>UTF-8</source.encoding>
-		<spring.version>4.0.5.RELEASE</spring.version>
+		<spring.version>5.2.6.RELEASE</spring.version>
 		
 		<selenium.api.version>2.53.1</selenium.api.version>
 		<!-- ChromeDriver_Mac64_2.36 -->
